@@ -1,0 +1,2480 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Share Boost</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="icon" href="https://i.imgur.com/zi15QL3.png" type="image/png">
+    <link rel="apple-touch-icon" href="https://i.imgur.com/zi15QL3.png">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-appearance" content="black-translucent">
+    <meta name="theme-color" content="#1E1A34">
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        poppins: ['Poppins', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: '#8B5CF6',
+                        'primary-darker': '#7C3AED',
+                        'text-main': '#E5E7EB',
+                        'text-muted': '#9CA3AF',
+                        'bg-container': '#1E1A34',
+                        'bg-card': 'rgba(43, 42, 62, 0.7)',
+                        'border-color': 'rgba(139, 92, 246, 0.15)',
+                        'input-bg': 'rgba(43, 42, 62, 0.5)',
+                        'input-border': 'rgba(139, 92, 246, 0.3)',
+                        'nav-bg': 'rgba(30, 26, 52, 0.95)',
+                        'nav-border': 'rgba(139, 92, 246, 0.2)',
+                        'modal-bg': '#2a2744',
+                        'success-bg': '#166534',
+                        'success-text': '#dcfce7',
+                        'error-bg': '#991b1b',
+                        'error-text': '#fee2e2',
+                        'info-bg': 'rgba(139, 92, 246, 0.1)',
+                        'info-text': '#d8b4fe',
+                        'info-border': 'rgba(139, 92, 246, 0.3)',
+                        'warning-bg': 'rgba(245, 158, 11, 0.1)',
+                        'warning-text': '#fde68a',
+                        'warning-border': 'rgba(217, 119, 6, 0.3)',
+                        'video-bg': 'rgba(22, 163, 74, 0.1)',
+                        'video-text': '#bbf7d0',
+                        'video-border': 'rgba(21, 128, 61, 0.3)',
+                        'server-item-bg-hover': 'rgba(139, 92, 246, 0.1)',
+                        'status-active': '#22c55e',
+                        'status-offline': '#ef4444',
+                        'status-timeout': '#f59e0b',
+                        'premium-bg': 'rgba(234, 179, 8, 0.1)',
+                        'premium-text': '#fde047',
+                        'premium-border': 'rgba(234, 179, 8, 0.3)',
+                    },
+                    boxShadow: {
+                        'primary-glow': '0 0 15px rgba(139, 92, 246, 0.3)',
+                        'card': '0 5px 20px rgba(0, 0, 0, 0.2)',
+                        'header': '0 2px 10px rgba(30, 26, 52, 0.2)',
+                        'nav': '0 -2px 10px rgba(30, 26, 52, 0.2)',
+                    }
+                },
+            },
+        }
+    </script>
+
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+            overscroll-behavior-y: contain;
+            background-color: theme('colors.bg-container');
+            color: theme('colors.text-main');
+        }
+
+        ::-webkit-scrollbar {
+            width: 5px;
+            height: 5px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: theme('colors.primary');
+            border-radius: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: theme('colors.primary-darker');
+        }
+
+        .content-section {
+            display: none;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(5px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1.75rem;
+            color: inherit;
+            position: relative;
+            padding-bottom: 0rem;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background-color: rgba(0, 0, 0, 0.75);
+            z-index: 1050;
+            justify-content: center;
+            align-items: center;
+            padding: 1rem;
+            animation: modalFadeIn 0.3s ease-out;
+        }
+
+        @keyframes modalFadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        .modal-content {
+            padding: 1.75rem;
+            border-radius: 16px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            min-width: 300px;
+            max-width: 90%;
+            border: 1px solid theme('colors.border-color');
+            background-color: theme('colors.modal-bg');
+            color: theme('colors.text-main');
+            animation: modalScaleUp 0.3s ease-out;
+            position: relative;
+        }
+
+        @keyframes modalScaleUp {
+            from {
+                transform: scale(0.95);
+                opacity: 0.7;
+            }
+
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        #responseModal .modal-content {
+            padding: 1.75rem;
+        }
+
+        .modal-content.success {
+            border-left: 5px solid theme('colors.status-active');
+            background-color: theme('colors.success-bg');
+            color: theme('colors.success-text');
+        }
+
+        .modal-content.error {
+            border-left: 5px solid theme('colors.status-offline');
+            background-color: theme('colors.error-bg');
+            color: theme('colors.error-text');
+        }
+
+        .tutorial-video {
+            width: 100%;
+            max-width: 100%;
+            height: auto;
+            border-radius: 0.75rem;
+            background-color: #000;
+            border: 1px solid theme('colors.border-color');
+            box-shadow: theme('boxShadow.card');
+            display: block;
+        }
+
+        .nav-item {
+            transition: color 0.2s ease-in-out;
+        }
+
+        .nav-indicator {
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        input:focus,
+        textarea:focus,
+        select:focus,
+        button:focus-visible {
+            outline: 2px solid theme('colors.primary') !important;
+            outline-offset: 2px;
+            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2);
+        }
+
+        button,
+        .nav-item,
+        .server-item {
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        .server-item {
+            transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out;
+            cursor: pointer;
+            border-color: theme('colors.input-border');
+        }
+
+        .server-item:not(.disabled):hover {
+            background-color: theme('colors.server-item-bg-hover');
+        }
+
+        .server-item.disabled {
+            cursor: not-allowed;
+            opacity: 0.5;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .modal-close-button {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            padding: 0.5rem;
+            border-radius: 9999px;
+            background-color: rgba(255, 255, 255, 0.05);
+            line-height: 1;
+            transition: background-color 0.2s;
+        }
+
+        .modal-close-button:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .heading-underline::after {
+             content: '';
+             position: absolute;
+             left: 0;
+             bottom: -2px;
+             width: 100%;
+             height: 3px;
+             background-color: theme('colors.primary');
+             opacity: 0.6;
+             border-radius: 2px;
+        }
+
+        #side-menu {
+            transform: translateX(-100%);
+            transition: transform 0.3s ease-in-out;
+        }
+        #side-menu.open {
+            transform: translateX(0);
+        }
+        #menu-overlay {
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        #terminal {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            width: 300px;
+            max-height: 400px;
+            background-color: theme('colors.modal-bg');
+            border: 1px solid theme('colors.border-color');
+            border-radius: 12px;
+            overflow: hidden;
+            z-index: 100;
+            display: none;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        }
+        #terminal-header {
+            padding: 10px 15px;
+            background-color: theme('colors.bg-card');
+            border-bottom: 1px solid theme('colors.border-color');
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        #terminal-content {
+            padding: 15px;
+            font-family: monospace;
+            font-size: 12px;
+            color: theme('colors.text-main');
+            overflow-y: auto;
+            max-height: 350px;
+        }
+        #terminal-toggle {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            background-color: theme('colors.primary');
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            z-index: 100;
+            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4);
+            transition: transform 0.2s ease;
+        }
+        #terminal-toggle:hover {
+            transform: scale(1.1);
+        }
+        #terminal-toggle.active {
+            background-color: theme('colors.primary-darker');
+        }
+        .terminal-line {
+            margin-bottom: 8px;
+            line-height: 1.4;
+        }
+        .terminal-line.success {
+            color: #22c55e;
+        }
+        .terminal-line.error {
+            color: #ef4444;
+        }
+        .terminal-line.info {
+            color: #8B5CF6;
+        }
+        .terminal-line.warning {
+            color: #f59e0b;
+        }
+        .terminal-timestamp {
+            color: theme('colors.text-muted');
+            margin-right: 8px;
+        }
+
+        /* New styles for login/signup */
+        .auth-container {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        .auth-form {
+            background: theme('colors.bg-card');
+            border-radius: 12px;
+            padding: 2rem;
+            border: 1px solid theme('colors.border-color');
+        }
+        .auth-tabs {
+            display: flex;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid theme('colors.border-color');
+        }
+        .auth-tab {
+            padding: 0.75rem 1rem;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            font-weight: 500;
+        }
+        .auth-tab.active {
+            border-bottom-color: theme('colors.primary');
+            color: theme('colors.primary');
+        }
+        .profile-pic-selector {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: theme('colors.input-bg');
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            cursor: pointer;
+            overflow: hidden;
+            border: 2px solid theme('colors.primary');
+        }
+        .profile-pic-selector img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .post-card {
+            background: theme('colors.bg-card');
+            border-radius: 12px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border: 1px solid theme('colors.border-color');
+        }
+        .post-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        .post-action {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+        }
+        .chat-message {
+            max-width: 70%;
+            padding: 0.75rem 1rem;
+            border-radius: 1rem;
+            margin-bottom: 0.5rem;
+        }
+        .chat-message.sent {
+            background: theme('colors.primary');
+            color: white;
+            margin-left: auto;
+            border-bottom-right-radius: 0.25rem;
+        }
+        .chat-message.received {
+            background: theme('colors.input-bg');
+            margin-right: auto;
+            border-bottom-left-radius: 0.25rem;
+        }
+        .chat-container {
+            height: 400px;
+            overflow-y: auto;
+            padding: 1rem;
+            background: theme('colors.bg-card');
+            border-radius: 12px;
+            border: 1px solid theme('colors.border-color');
+        }
+        .chat-input-container {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+        .premium-badge {
+            background: linear-gradient(90deg, #f59e0b, #f97316);
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        /* New styles for comments */
+        .comment-container {
+            margin-top: 10px;
+            border-top: 1px solid theme('colors.border-color');
+            padding-top: 10px;
+        }
+        
+        .comment-list {
+            max-height: 200px;
+            overflow-y: auto;
+            margin-bottom: 10px;
+        }
+        
+        .comment-item {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+        
+        .comment-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        
+        .comment-content {
+            flex-grow: 1;
+            background: theme('colors.input-bg');
+            padding: 8px 12px;
+            border-radius: 18px;
+            font-size: 14px;
+        }
+        
+        .comment-author {
+            font-weight: 600;
+            margin-bottom: 2px;
+            font-size: 13px;
+        }
+        
+        .comment-text {
+            word-break: break-word;
+        }
+        
+        .comment-input-container {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+        
+        .comment-input {
+            flex-grow: 1;
+            background: theme('colors.input-bg');
+            border-radius: 18px;
+            padding: 8px 12px;
+            border: none;
+            font-size: 14px;
+        }
+        
+        .comment-submit {
+            background: theme('colors.primary');
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+        
+        .comment-count {
+            font-size: 13px;
+            color: theme('colors.text-muted');
+            margin-bottom: 5px;
+            cursor: pointer;
+        }
+        
+        /* Admin panel improvements */
+        .admin-user-card {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            border-radius: 8px;
+            background: theme('colors.bg-card');
+            margin-bottom: 8px;
+        }
+        
+        .admin-user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        
+        .admin-user-info {
+            flex-grow: 1;
+        }
+        
+        .admin-user-name {
+            font-weight: 600;
+        }
+        
+        .admin-user-email {
+            font-size: 12px;
+            color: theme('colors.text-muted');
+        }
+        
+        .admin-user-status {
+            font-size: 12px;
+            padding: 2px 8px;
+            border-radius: 10px;
+        }
+        
+        .admin-user-premium {
+            background: rgba(234, 179, 8, 0.2);
+            color: #facc15;
+        }
+        
+        .admin-user-free {
+            background: rgba(156, 163, 175, 0.2);
+            color: theme('colors.text-muted');
+        }
+        
+        .admin-toggle-btn {
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            border: none;
+        }
+        
+        .admin-toggle-premium {
+            background: #facc15;
+            color: #1c1917;
+        }
+        
+        .admin-toggle-remove {
+            background: theme('colors.error-bg');
+            color: theme('colors.error-text');
+        }
+        
+        .admin-stats-card {
+            padding: 12px;
+            border-radius: 8px;
+            background: theme('colors.bg-card');
+            margin-bottom: 12px;
+        }
+        
+        .admin-stats-title {
+            font-size: 14px;
+            color: theme('colors.text-muted');
+            margin-bottom: 8px;
+        }
+        
+        .admin-stats-value {
+            font-size: 24px;
+            font-weight: 600;
+        }
+    </style>
+</head>
+
+<body class="bg-bg-container text-text-main font-poppins">
+    <!-- Login/Signup Container (shown by default) -->
+    <div id="auth-container" class="auth-container min-h-screen flex items-center justify-center">
+        <div class="auth-form w-full">
+            <div class="auth-tabs">
+                <div id="login-tab" class="auth-tab active">Login</div>
+                <div id="signup-tab" class="auth-tab">Sign Up</div>
+            </div>
+            
+            <!-- Login Form -->
+            <div id="login-form" class="auth-content">
+                <div class="mb-4">
+                    <label for="login-username" class="block text-sm font-medium mb-1">Username</label>
+                    <input type="text" id="login-username" class="w-full p-3 rounded-lg border bg-input-bg border-input-border text-text-main placeholder-text-muted focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all text-sm" placeholder="Enter your username" required>
+                </div>
+                <div class="mb-4">
+                    <label for="login-password" class="block text-sm font-medium mb-1">Password</label>
+                    <input type="password" id="login-password" class="w-full p-3 rounded-lg border bg-input-bg border-input-border text-text-main placeholder-text-muted focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all text-sm" placeholder="Enter your password" required>
+                </div>
+                <button id="login-button" class="w-full bg-primary text-white py-3 rounded-lg font-semibold text-base hover:bg-primary-darker transition-all duration-300 flex items-center justify-center gap-2 shadow-md hover:shadow-lg shadow-primary/30 active:scale-[0.98]">
+                    Login
+                </button>
+                <div class="text-center mt-4 text-sm">
+                    <a href="#" id="forgot-password" class="text-primary hover:underline">Forgot password?</a>
+                </div>
+                <div class="text-center mt-4 text-sm">
+                    <span class="text-text-muted">Admin? </span>
+                    <a href="#" id="admin-login-toggle" class="text-primary hover:underline">Login here</a>
+                </div>
+            </div>
+            
+            <!-- Admin Login Form (hidden by default) -->
+            <div id="admin-login-form" class="auth-content hidden">
+                <div class="mb-4">
+                    <label for="admin-username" class="block text-sm font-medium mb-1">Admin Username</label>
+                    <input type="text" id="admin-username" class="w-full p-3 rounded-lg border bg-input-bg border-input-border text-text-main placeholder-text-muted focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all text-sm" placeholder="Enter admin username" required>
+                </div>
+                <div class="mb-4">
+                    <label for="admin-password" class="block text-sm font-medium mb-1">Admin Password</label>
+                    <input type="password" id="admin-password" class="w-full p-3 rounded-lg border bg-input-bg border-input-border text-text-main placeholder-text-muted focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all text-sm" placeholder="Enter admin password" required>
+                </div>
+                <button id="admin-login-button" class="w-full bg-primary text-white py-3 rounded-lg font-semibold text-base hover:bg-primary-darker transition-all duration-300 flex items-center justify-center gap-2 shadow-md hover:shadow-lg shadow-primary/30 active:scale-[0.98]">
+                    Admin Login
+                </button>
+                <div class="text-center mt-4 text-sm">
+                    <a href="#" id="back-to-user-login" class="text-primary hover:underline">Back to user login</a>
+                </div>
+            </div>
+            
+            <!-- Signup Form (hidden by default) -->
+            <div id="signup-form" class="auth-content hidden">
+                <div class="text-center mb-4">
+                    <div class="profile-pic-selector" id="profile-pic-selector">
+                        <i data-lucide="user" class="w-10 h-10 text-text-muted"></i>
+                        <input type="file" id="profile-pic-input" accept="image/*" class="hidden">
+                    </div>
+                    <div class="text-xs text-text-muted">Click to upload profile picture</div>
+                </div>
+                <div class="mb-4">
+                    <label for="signup-username" class="block text-sm font-medium mb-1">Username</label>
+                    <input type="text" id="signup-username" class="w-full p-3 rounded-lg border bg-input-bg border-input-border text-text-main placeholder-text-muted focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all text-sm" placeholder="Choose a username" required>
+                </div>
+                <div class="mb-4">
+                    <label for="signup-email" class="block text-sm font-medium mb-1">Email</label>
+                    <input type="email" id="signup-email" class="w-full p-3 rounded-lg border bg-input-bg border-input-border text-text-main placeholder-text-muted focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all text-sm" placeholder="Enter your email" required>
+                </div>
+                <div class="mb-4">
+                    <label for="signup-password" class="block text-sm font-medium mb-1">Password</label>
+                    <input type="password" id="signup-password" class="w-full p-3 rounded-lg border bg-input-bg border-input-border text-text-main placeholder-text-muted focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all text-sm" placeholder="Create a password" required>
+                </div>
+                <div class="mb-4">
+                    <label for="signup-confirm-password" class="block text-sm font-medium mb-1">Confirm Password</label>
+                    <input type="password" id="signup-confirm-password" class="w-full p-3 rounded-lg border bg-input-bg border-input-border text-text-main placeholder-text-muted focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all text-sm" placeholder="Confirm your password" required>
+                </div>
+                <button id="signup-button" class="w-full bg-primary text-white py-3 rounded-lg font-semibold text-base hover:bg-primary-darker transition-all duration-300 flex items-center justify-center gap-2 shadow-md hover:shadow-lg shadow-primary/30 active:scale-[0.98]">
+                    Create Account
+                </button>
+                <div class="text-center mt-4 text-sm">
+                    <span class="text-text-muted">Already have an account? </span>
+                    <a href="#" id="back-to-login" class="text-primary hover:underline">Login here</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main App Container (hidden until login) -->
+    <div id="app-container" class="max-w-md mx-auto min-h-screen pb-20 bg-bg-container shadow-lg flex flex-col relative overflow-x-hidden hidden">
+        <header class="p-4 border-b bg-nav-bg border-nav-border sticky top-0 z-40 backdrop-blur-md shadow-header">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-2.5">
+                   <img id="user-profile-pic" src="" alt="Profile" class="w-8 h-8 rounded-full">
+                   <h1 class="text-xl font-semibold text-inherit">Share Boost</h1>
+                   <span id="user-premium-badge" class="text-xs font-medium text-primary bg-primary/10 px-2 py-0.5 rounded-full hidden">PREMIUM</span>
+                </div>
+                <div class="flex items-center space-x-3">
+                    <button id="developer-button" class="text-text-muted hover:text-primary transition-colors p-1.5 bg-primary/10 rounded-lg">
+                        <i data-lucide="code" class="w-5 h-5 text-primary"></i>
+                    </button>
+                    <button id="settings-button" class="text-text-muted hover:text-primary transition-colors p-1.5 bg-primary/10 rounded-lg">
+                        <i data-lucide="settings-2" class="w-5 h-5 text-primary"></i>
+                    </button>
+                    <button id="menu-button" class="text-text-muted hover:text-primary transition-colors">
+                        <i data-lucide="menu" class="w-5 h-5"></i>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <main class="flex-grow overflow-y-auto p-5">
+            <div class="content-sections">
+                <section id="home-section" class="content-section active">
+                    <form id="share-boost-form" class="space-y-5 mt-5">
+                        <div>
+                            <label for="cookies" class="text-sm font-medium text-text-muted mb-1.5 block flex items-center gap-1.5">
+                                <i data-lucide="cookie" class="w-4 h-4 text-primary"></i> Appstate:
+                            </label>
+                            <textarea id="cookies" name="cookie" rows="4" class="w-full p-3 rounded-lg border bg-input-bg border-input-border text-text-main placeholder-text-muted focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all text-sm" placeholder="Paste your Facebook appstate JSON here..." required></textarea>
+                        </div>
+                        <div>
+                            <label for="urls" class="text-sm font-medium text-text-muted mb-1.5 block flex items-center gap-1.5">
+                                <i data-lucide="link" class="w-4 h-4 text-primary"></i> Post Link:
+                            </label>
+                            <input type="url" id="urls" name="url" class="w-full p-3 rounded-lg border bg-input-bg border-input-border text-text-main placeholder-text-muted focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all text-sm" placeholder="https://www.facebook.com/..." required>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label for="amounts" class="text-sm font-medium text-text-muted mb-1.5 block flex items-center gap-1.5">
+                                    <i data-lucide="hash" class="w-4 h-4 text-primary"></i> Share Limit:
+                                </label>
+                                <input type="number" id="amounts" name="amount" class="w-full p-3 rounded-lg border bg-input-bg border-input-border text-text-main placeholder-text-muted focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all text-sm" placeholder="e.g., 100" min="1" max="500" required>
+                                <div id="share-limit-info" class="text-xs text-text-muted mt-1">Free users limited to 500 shares</div>
+                            </div>
+                            <div>
+                                <label for="intervals" class="text-sm font-medium text-text-muted mb-1.5 block flex items-center gap-1.5">
+                                    <i data-lucide="timer" class="w-4 h-4 text-primary"></i> Delay (sec):
+                                </label>
+                                <input type="number" id="intervals" name="interval" class="w-full p-3 rounded-lg border bg-input-bg border-input-border text-text-main placeholder-text-muted focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all text-sm" placeholder="e.g., 10" min="1" required>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="text-sm font-medium text-text-muted mb-1.5 block flex items-center gap-1.5">
+                                <i data-lucide="server" class="w-4 h-4 text-primary"></i> Server:
+                            </label>
+                            <input type="hidden" id="selectedServer" name="server" value="">
+                            <button type="button" id="server-select-button" class="w-full p-3 rounded-lg border bg-input-bg border-input-border text-text-main focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all text-sm text-left flex justify-between items-center hover:bg-white/5">
+                                <span id="server-select-button-text">Select a Server...</span>
+                                <i data-lucide="chevron-down" class="w-4 h-4 text-text-muted"></i>
+                            </button>
+                        </div>
+                        <button type="submit" id="submit-button" class="w-full bg-primary text-white py-3 rounded-lg font-semibold text-base hover:bg-primary-darker transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed shadow-md hover:shadow-lg shadow-primary/30 active:scale-[0.98]" disabled>
+                            <span class="button-icon"><i data-lucide="loader-circle" class="w-5 h-5 animate-spin"></i></span>
+                            <span class="button-text">Checking Servers...</span>
+                        </button>
+                    </form>
+                </section>
+
+                <section id="tutorial-section" class="content-section">
+                    <h2 class="section-title">Video Tutorial</h2>
+                    <div class="p-3 bg-bg-card rounded-xl border border-border-color shadow-card overflow-hidden">
+                        <video class="tutorial-video" controls preload="metadata" poster="https://i.imgur.com/NHzW52j.png">
+                            <source src="https://i.imgur.com/UvbU5QK.mp4" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                    </div>
+                    <p class="text-center text-sm text-text-muted mt-6 px-2 leading-relaxed">
+                        Watch the video to learn how to get your appstate and use the Share Boost tool correctly.
+                    </p>
+                </section>
+
+                <section id="notifications-section" class="content-section">
+                    <h2 class="section-title">Notifications</h2>
+                    <div id="notifications-list" class="space-y-4">
+                         <div class="flex items-start gap-3 p-3.5 bg-info-bg rounded-lg border border-info-border shadow-sm">
+                            <i data-lucide="paintbrush" class="w-5 h-5 text-primary flex-shrink-0 mt-0.5"></i>
+                            <span class="text-sm text-info-text">We've updated the design for a fresh new look! Hope you like it.</span>
+                        </div>
+                        <div class="flex items-start gap-3 p-3.5 bg-info-bg rounded-lg border border-info-border shadow-sm">
+                            <i data-lucide="info" class="w-5 h-5 text-primary flex-shrink-0 mt-0.5"></i>
+                            <span class="text-sm text-info-text">Welcome! Ensure the server is active before starting.</span>
+                        </div>
+                        <div class="flex items-start gap-3 p-3.5 bg-video-bg rounded-lg border border-video-border shadow-sm">
+                            <i data-lucide="video" class="w-5 h-5 text-green-400 flex-shrink-0 mt-0.5"></i>
+                            <span class="text-sm text-video-text">There's now a video guide in the Tutorial section!</span>
+                        </div>
+                        <div class="flex items-start gap-3 p-3.5 bg-warning-bg rounded-lg border border-warning-border shadow-sm">
+                            <i data-lucide="alert-triangle" class="w-5 h-5 text-yellow-400 flex-shrink-0 mt-0.5"></i>
+                            <span class="text-sm text-warning-text">Use responsibly. Avoid excessive sharing to prevent Facebook restrictions.</span>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="posts-section" class="content-section">
+                    <h2 class="section-title">Posts</h2>
+                    <div class="mb-4">
+                        <div class="post-card">
+                            <div class="flex items-center gap-2 mb-3">
+                                <img id="current-user-pic" src="" alt="Profile" class="w-8 h-8 rounded-full">
+                                <div>
+                                    <div class="font-medium" id="current-user-name"></div>
+                                    <div class="text-xs text-text-muted">Just now</div>
+                                </div>
+                            </div>
+                            <textarea id="post-content" class="w-full p-3 rounded-lg border bg-input-bg border-input-border text-text-main placeholder-text-muted focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all text-sm" placeholder="What's on your mind?" rows="3"></textarea>
+                            <div class="mt-2">
+                                <input type="file" id="post-image" accept="image/*" class="hidden">
+                                <button id="add-image-btn" class="text-xs text-primary flex items-center gap-1">
+                                    <i data-lucide="image" class="w-4 h-4"></i>
+                                    Add Image
+                                </button>
+                                <div id="image-preview" class="mt-2 hidden">
+                                    <img id="preview-image" src="" alt="Preview" class="max-w-full rounded-lg">
+                                    <button id="remove-image-btn" class="text-xs text-red-500 mt-1 flex items-center gap-1">
+                                        <i data-lucide="trash-2" class="w-4 h-4"></i>
+                                        Remove
+                                    </button>
+                                </div>
+                            </div>
+                            <button id="post-submit-btn" class="w-full bg-primary text-white py-2 px-4 rounded-lg font-medium text-sm hover:bg-primary-darker transition-all duration-300 mt-3">
+                                Post
+                            </button>
+                        </div>
+                    </div>
+                    <div id="posts-feed" class="space-y-4">
+                        <!-- Posts will be loaded here -->
+                    </div>
+                </section>
+
+                <section id="profile-section" class="content-section">
+                    <h2 class="section-title">Profile Settings</h2>
+                    <div class="space-y-4">
+                        <div class="text-center">
+                            <div class="profile-pic-selector mx-auto" id="profile-pic-update">
+                                <i data-lucide="user" class="w-10 h-10 text-text-muted"></i>
+                                <input type="file" id="profile-pic-update-input" accept="image/*" class="hidden">
+                            </div>
+                            <div class="text-xs text-text-muted mt-1">Click to change profile picture</div>
+                        </div>
+                        
+                        <div>
+                            <label for="profile-username" class="text-sm font-medium text-text-muted mb-1.5 block">Username</label>
+                            <input type="text" id="profile-username" class="w-full p-3 rounded-lg border bg-input-bg border-input-border text-text-main placeholder-text-muted focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all text-sm" placeholder="Username">
+                        </div>
+                        
+                        <div>
+                            <label for="profile-email" class="text-sm font-medium text-text-muted mb-1.5 block">Email</label>
+                            <input type="email" id="profile-email" class="w-full p-3 rounded-lg border bg-input-bg border-input-border text-text-main placeholder-text-muted focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all text-sm" placeholder="Email">
+                        </div>
+                        
+                        <div>
+                            <label for="profile-password" class="text-sm font-medium text-text-muted mb-1.5 block">New Password</label>
+                            <input type="password" id="profile-password" class="w-full p-3 rounded-lg border bg-input-bg border-input-border text-text-main placeholder-text-muted focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all text-sm" placeholder="Leave blank to keep current">
+                        </div>
+                        
+                        <div>
+                            <label for="profile-confirm-password" class="text-sm font-medium text-text-muted mb-1.5 block">Confirm New Password</label>
+                            <input type="password" id="profile-confirm-password" class="w-full p-3 rounded-lg border bg-input-bg border-input-border text-text-main placeholder-text-muted focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all text-sm" placeholder="Confirm new password">
+                        </div>
+                        
+                        <button id="profile-save-btn" class="w-full bg-primary text-white py-3 rounded-lg font-semibold text-base hover:bg-primary-darker transition-all duration-300">
+                            Save Changes
+                        </button>
+                    </div>
+                </section>
+
+                <section id="global-chat-section" class="content-section">
+                    <h2 class="section-title">Global Chat</h2>
+                    <div class="chat-container" id="chat-messages">
+                        <!-- Chat messages will appear here -->
+                        <div class="text-center text-text-muted py-4">Start chatting with others!</div>
+                    </div>
+                    <div class="chat-input-container">
+                        <input type="text" id="chat-input" class="flex-grow p-3 rounded-lg border bg-input-bg border-input-border text-text-main placeholder-text-muted focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all text-sm" placeholder="Type your message...">
+                        <button id="send-chat-btn" class="bg-primary text-white p-3 rounded-lg">
+                            <i data-lucide="send" class="w-5 h-5"></i>
+                        </button>
+                    </div>
+                </section>
+
+                <section id="admin-section" class="content-section">
+                    <h2 class="section-title">Admin Panel</h2>
+                    <div class="space-y-4">
+                        <div class="admin-stats-card">
+                            <div class="admin-stats-title">Total Users</div>
+                            <div class="admin-stats-value" id="total-users-count">0</div>
+                        </div>
+                        
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="admin-stats-card">
+                                <div class="admin-stats-title">Premium Users</div>
+                                <div class="admin-stats-value" id="premium-users-count">0</div>
+                            </div>
+                            <div class="admin-stats-card">
+                                <div class="admin-stats-title">Free Users</div>
+                                <div class="admin-stats-value" id="free-users-count">0</div>
+                            </div>
+                        </div>
+                        
+                        <div class="admin-stats-card">
+                            <div class="admin-stats-title">Total Shares Used</div>
+                            <div class="admin-stats-value" id="total-shares-count">0</div>
+                        </div>
+                        
+                        <h3 class="font-medium">User Management</h3>
+                        <div id="users-list" class="space-y-2">
+                            <!-- Users will be loaded here -->
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+
+        <nav class="fixed bottom-0 left-0 right-0 bg-nav-bg border-t border-nav-border max-w-md mx-auto backdrop-blur-md z-50 shadow-nav">
+            <div class="relative">
+                <div class="flex justify-around items-center px-3 py-2.5">
+                    <a href="#" data-section="home" class="nav-item flex flex-col items-center text-primary p-2 w-1/4">
+                        <i data-lucide="home" class="w-5 h-5 mb-0.5"></i><span class="text-xs font-medium">Home</span>
+                    </a>
+                    <a href="#" data-section="posts" class="nav-item flex flex-col items-center text-text-muted p-2 w-1/4 hover:text-primary transition-colors">
+                        <i data-lucide="message-square" class="w-5 h-5 mb-0.5"></i><span class="text-xs font-medium">Posts</span>
+                    </a>
+                    <a href="#" data-section="tutorial" class="nav-item flex flex-col items-center text-text-muted p-2 w-1/4 hover:text-primary transition-colors">
+                        <i data-lucide="play-circle" class="w-5 h-5 mb-0.5"></i><span class="text-xs font-medium">Tutorial</span>
+                    </a>
+                    <a href="#" data-section="notifications" class="nav-item flex flex-col items-center text-text-muted p-2 w-1/4 hover:text-primary transition-colors">
+                        <i data-lucide="bell" class="w-5 h-5 mb-0.5"></i><span class="text-xs font-medium">Notify</span>
+                    </a>
+                </div>
+                <div class="nav-indicator absolute bottom-0 left-0 h-1 bg-primary rounded-t-full" style="width: 25%"></div>
+            </div>
+        </nav>
+
+        <!-- Modals -->
+        <div id="responseModal" class="modal">
+            <div class="modal-content flex flex-col items-center gap-3">
+                <div id="modal-icon"></div>
+                <div id="responseMessage" class="text-sm font-medium"></div>
+            </div>
+        </div>
+
+        <div id="serverModal" class="modal">
+            <div class="modal-content text-left">
+                <button type="button" class="modal-close-button" aria-label="Close server selection" onclick="document.getElementById('serverModal').style.display='none'">
+                    <i data-lucide="x" class="w-4 h-4 text-text-muted"></i>
+                </button>
+                <h3 class="text-lg font-semibold mb-4 text-center">Select Server</h3>
+                <div id="server-list" class="space-y-2 max-h-[40vh] overflow-y-auto pr-2">
+                </div>
+            </div>
+        </div>
+
+        <div id="developerModal" class="modal">
+            <div class="modal-content text-left">
+                <button type="button" class="modal-close-button" aria-label="Close developer info" onclick="document.getElementById('developerModal').style.display='none'">
+                    <i data-lucide="x" class="w-4 h-4 text-text-muted"></i>
+                </button>
+                <h3 class="text-lg font-semibold mb-4 text-center">Developers</h3>
+                <div class="space-y-3">
+                    <div class="flex items-center gap-3 p-3 bg-bg-card rounded-lg border border-border-color">
+                        <i data-lucide="user" class="w-5 h-5 text-primary"></i>
+                        <div>
+                            <h4 class="font-medium">Joshua Apostol</h4>
+                            <a href="https://www.facebook.com/joshuaapostol2006" target="_blank" class="text-xs text-primary hover:underline">View Profile</a>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-3 p-3 bg-bg-card rounded-lg border border-border-color">
+                        <i data-lucide="user" class="w-5 h-5 text-primary"></i>
+                        <div>
+                            <h4 class="font-medium">Jurex Aso</h4>
+                            <a href="https://www.facebook.com/jurex.aso" target="_blank" class="text-xs text-primary hover:underline">View Profile</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="terminal">
+            <div id="terminal-header" class="flex items-center justify-between">
+                <span class="font-medium">Terminal</span>
+                <button id="terminal-close" class="text-text-muted hover:text-primary">
+                    <i data-lucide="x" class="w-4 h-4"></i>
+                </button>
+            </div>
+            <div id="terminal-content">
+                <!-- Terminal logs will be added here dynamically -->
+            </div>
+        </div>
+
+        <div id="terminal-toggle">
+            <i data-lucide="terminal" class="w-5 h-5 text-white"></i>
+        </div>
+
+        <div id="menu-overlay" class="fixed inset-0 bg-black/60 z-[55] hidden opacity-0"></div>
+        <div id="side-menu" class="fixed top-0 left-0 bottom-0 w-72 bg-nav-bg shadow-lg z-[60] flex flex-col p-5 border-r border-nav-border">
+            <div class="flex items-center justify-between mb-6">
+                <div class="flex items-center gap-2.5">
+                   <img id="side-profile-pic" src="" alt="Logo" class="w-8 h-8 rounded-full">
+                   <div>
+                        <h2 class="text-lg font-semibold text-inherit" id="side-username"></h2>
+                        <div id="side-premium-badge" class="premium-badge hidden">
+                            <i data-lucide="crown" class="w-3 h-3"></i>
+                            <span>PREMIUM</span>
+                        </div>
+                   </div>
+                </div>
+                <button id="close-menu-button" class="text-text-muted hover:text-primary p-1 rounded-full hover:bg-white/10">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+            <nav class="flex-grow space-y-2">
+                 <a href="#" data-section="home" class="side-menu-item flex items-center gap-3 px-3 py-2.5 rounded-lg text-text-main bg-primary/10 font-medium">
+                     <i data-lucide="home" class="w-5 h-5 text-primary"></i>
+                     <span>Home</span>
+                 </a>
+                 <a href="#" data-section="posts" class="side-menu-item flex items-center gap-3 px-3 py-2.5 rounded-lg text-text-muted hover:text-text-main hover:bg-white/10 transition-colors">
+                     <i data-lucide="message-square" class="w-5 h-5"></i>
+                     <span>Posts</span>
+                 </a>
+                 <a href="#" data-section="tutorial" class="side-menu-item flex items-center gap-3 px-3 py-2.5 rounded-lg text-text-muted hover:text-text-main hover:bg-white/10 transition-colors">
+                     <i data-lucide="play-circle" class="w-5 h-5"></i>
+                     <span>Tutorial</span>
+                 </a>
+                 <a href="#" data-section="notifications" class="side-menu-item flex items-center gap-3 px-3 py-2.5 rounded-lg text-text-muted hover:text-text-main hover:bg-white/10 transition-colors">
+                     <i data-lucide="bell" class="w-5 h-5"></i>
+                     <span>Notifications</span>
+                 </a>
+                 <a href="#" data-section="global-chat" class="side-menu-item flex items-center gap-3 px-3 py-2.5 rounded-lg text-text-muted hover:text-text-main hover:bg-white/10 transition-colors">
+                     <i data-lucide="message-circle" class="w-5 h-5"></i>
+                     <span>Global Chat</span>
+                 </a>
+                 <a href="#" data-section="profile" class="side-menu-item flex items-center gap-3 px-3 py-2.5 rounded-lg text-text-muted hover:text-text-main hover:bg-white/10 transition-colors">
+                     <i data-lucide="user" class="w-5 h-5"></i>
+                     <span>Profile</span>
+                 </a>
+                 <a href="#" id="side-developer-button" class="side-menu-item flex items-center gap-3 px-3 py-2.5 rounded-lg text-text-muted hover:text-text-main hover:bg-white/10 transition-colors">
+                     <i data-lucide="code" class="w-5 h-5"></i>
+                     <span>Developers</span>
+                 </a>
+                 <a href="#" id="admin-menu-item" class="side-menu-item flex items-center gap-3 px-3 py-2.5 rounded-lg text-text-muted hover:text-text-main hover:bg-white/10 transition-colors hidden">
+                     <i data-lucide="shield" class="w-5 h-5"></i>
+                     <span>Admin Panel</span>
+                 </a>
+            </nav>
+            <div class="mt-auto pt-4 border-t border-nav-border">
+                 <button id="side-terminal-button" class="flex items-center justify-center gap-2 w-full bg-primary/10 text-primary py-2.5 px-4 rounded-lg font-semibold text-sm hover:bg-primary/20 transition-all duration-300 shadow-sm active:scale-[0.98] mb-2">
+                     <i data-lucide="terminal" class="w-4 h-4"></i>
+                     Open Terminal
+                 </button>
+                 <button id="logout-button" class="flex items-center justify-center gap-2 w-full bg-error-bg text-error-text py-2.5 px-4 rounded-lg font-semibold text-sm hover:bg-error-bg/80 transition-all duration-300 shadow-sm active:scale-[0.98]">
+                     <i data-lucide="log-out" class="w-4 h-4"></i>
+                     Logout
+                 </button>
+            </div>
+        </div>
+    </div>
+
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5625905404408423"
+     crossorigin="anonymous"></script>
+
+    <script>
+        const html = document.documentElement;
+        lucide.createIcons();
+
+        // Server definitions
+        const serverDefinitions = {
+            server1: { name: "Server 1", url: 'https://server1-u9fw.onrender.com' },
+            server2: { name: "Server 2", url: 'https://server-2-aggj.onrender.com' },
+            server3: { name: "Server 3", url: 'https://server-3-p6lg.onrender.com' }
+        };
+
+        // DOM Elements
+        const authContainer = document.getElementById('auth-container');
+        const appContainer = document.getElementById('app-container');
+        const loginTab = document.getElementById('login-tab');
+        const signupTab = document.getElementById('signup-tab');
+        const loginForm = document.getElementById('login-form');
+        const signupForm = document.getElementById('signup-form');
+        const adminLoginForm = document.getElementById('admin-login-form');
+        const adminLoginToggle = document.getElementById('admin-login-toggle');
+        const backToUserLogin = document.getElementById('back-to-user-login');
+        const backToLogin = document.getElementById('back-to-login');
+        const forgotPassword = document.getElementById('forgot-password');
+        const loginButton = document.getElementById('login-button');
+        const signupButton = document.getElementById('signup-button');
+        const adminLoginButton = document.getElementById('admin-login-button');
+        const profilePicSelector = document.getElementById('profile-pic-selector');
+        const profilePicInput = document.getElementById('profile-pic-input');
+        const profilePicUpdate = document.getElementById('profile-pic-update');
+        const profilePicUpdateInput = document.getElementById('profile-pic-update-input');
+        const userProfilePic = document.getElementById('user-profile-pic');
+        const sideProfilePic = document.getElementById('side-profile-pic');
+        const currentUserPic = document.getElementById('current-user-pic');
+        const currentUserName = document.getElementById('current-user-name');
+        const sideUsername = document.getElementById('side-username');
+        const userPremiumBadge = document.getElementById('user-premium-badge');
+        const sidePremiumBadge = document.getElementById('side-premium-badge');
+        const adminMenuItem = document.getElementById('admin-menu-item');
+        const logoutButton = document.getElementById('logout-button');
+        
+        // Share Boost form elements
+        const submitButton = document.getElementById('submit-button');
+        const buttonText = submitButton.querySelector('.button-text');
+        const buttonIcon = submitButton.querySelector('.button-icon');
+        const serverSelectButton = document.getElementById('server-select-button');
+        const serverSelectButtonText = document.getElementById('server-select-button-text');
+        const selectedServerInput = document.getElementById('selectedServer');
+        const serverListContainer = document.getElementById('server-list');
+        const serverModal = document.getElementById('serverModal');
+        const responseModal = document.getElementById('responseModal');
+        const responseMessageElement = document.getElementById('responseMessage');
+        const responseModalIconElement = document.getElementById('modal-icon');
+        const developerModal = document.getElementById('developerModal');
+        const developerButton = document.getElementById('developer-button');
+        const sideDeveloperButton = document.getElementById('side-developer-button');
+        const sideTerminalButton = document.getElementById('side-terminal-button');
+        const terminal = document.getElementById('terminal');
+        const terminalToggle = document.getElementById('terminal-toggle');
+        const terminalClose = document.getElementById('terminal-close');
+        const terminalContent = document.getElementById('terminal-content');
+        const form = document.getElementById('share-boost-form');
+        const menuButton = document.getElementById('menu-button');
+        const sideMenu = document.getElementById('side-menu');
+        const menuOverlay = document.getElementById('menu-overlay');
+        const closeMenuButton = document.getElementById('close-menu-button');
+        const sideMenuItems = document.querySelectorAll('.side-menu-item');
+        const navItems = document.querySelectorAll('.nav-item');
+        const navIndicator = document.querySelector('.nav-indicator');
+        const contentSections = document.querySelectorAll('.content-section');
+        const amountsInput = document.getElementById('amounts');
+        const shareLimitInfo = document.getElementById('share-limit-info');
+        
+        // Posts elements
+        const postContent = document.getElementById('post-content');
+        const postImage = document.getElementById('post-image');
+        const addImageBtn = document.getElementById('add-image-btn');
+        const imagePreview = document.getElementById('image-preview');
+        const previewImage = document.getElementById('preview-image');
+        const removeImageBtn = document.getElementById('remove-image-btn');
+        const postSubmitBtn = document.getElementById('post-submit-btn');
+        const postsFeed = document.getElementById('posts-feed');
+        
+        // Profile elements
+        const profileUsername = document.getElementById('profile-username');
+        const profileEmail = document.getElementById('profile-email');
+        const profilePassword = document.getElementById('profile-password');
+        const profileConfirmPassword = document.getElementById('profile-confirm-password');
+        const profileSaveBtn = document.getElementById('profile-save-btn');
+        
+        // Chat elements
+        const chatMessages = document.getElementById('chat-messages');
+        const chatInput = document.getElementById('chat-input');
+        const sendChatBtn = document.getElementById('send-chat-btn');
+        
+        // Admin elements
+        const usersList = document.getElementById('users-list');
+        const totalUsersCount = document.getElementById('total-users-count');
+        const premiumUsersCount = document.getElementById('premium-users-count');
+        const freeUsersCount = document.getElementById('free-users-count');
+        const totalSharesCount = document.getElementById('total-shares-count');
+
+        // App state
+        let currentUser = null;
+        let isAdmin = false;
+        let intervalCheck;
+        let currentSelectedServer = null;
+        let sharesSentCount = 0;
+        let chatSocket = null;
+        
+        // Sample users database (in a real app, this would be on the server)
+        const usersDatabase = [
+            { 
+                id: 1, 
+                username: 'joshua', 
+                email: 'joshua@example.com', 
+                password: 'password123', 
+                profilePic: 'https://i.imgur.com/JqYe5nN.jpg',
+                isPremium: true,
+                sharesUsed: 0
+            },
+            { 
+                id: 2, 
+                username: 'jurex', 
+                email: 'jurex@example.com', 
+                password: 'password123', 
+                profilePic: 'https://i.imgur.com/3NKyuyx.jpg',
+                isPremium: false,
+                sharesUsed: 250
+            },
+            { 
+                id: 3, 
+                username: 'admin', 
+                email: 'admin@example.com', 
+                password: 'admin123', 
+                profilePic: 'https://i.imgur.com/zi15QL3.png',
+                isAdmin: true,
+                isPremium: true,
+                sharesUsed: 0
+            }
+        ];
+        
+        // Sample posts database
+        let postsDatabase = [
+            {
+                id: 1,
+                userId: 1,
+                content: 'Just boosted my first post using Share Boost! Amazing tool!',
+                image: '',
+                likes: [2, 3],
+                comments: [
+                    { userId: 2, content: 'Nice! How many shares did you get?', timestamp: new Date(Date.now() - 1800000) },
+                    { userId: 1, content: 'Over 200 already!', timestamp: new Date(Date.now() - 1500000) }
+                ],
+                timestamp: new Date(Date.now() - 3600000)
+            },
+            {
+                id: 2,
+                userId: 2,
+                content: 'Anyone know how to get more Facebook appstate cookies?',
+                image: '',
+                likes: [1],
+                comments: [],
+                timestamp: new Date(Date.now() - 7200000)
+            }
+        ];
+        
+        // Sample chat messages
+        let chatMessagesDatabase = [
+            { userId: 1, content: 'Hello everyone!', timestamp: new Date(Date.now() - 1800000) },
+            { userId: 2, content: 'Hey there! How is everyone using Share Boost?', timestamp: new Date(Date.now() - 1200000) },
+            { userId: 1, content: 'Working great for me!', timestamp: new Date(Date.now() - 600000) }
+        ];
+
+        // Terminal functions
+        function addTerminalLog(message, type = 'info') {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString();
+            const logElement = document.createElement('div');
+            logElement.className = `terminal-line ${type}`;
+            logElement.innerHTML = `
+                <span class="terminal-timestamp">[${timeString}]</span>
+                <span class="terminal-message">${message}</span>
+            `;
+            terminalContent.appendChild(logElement);
+            terminalContent.scrollTop = terminalContent.scrollHeight;
+        }
+
+        function toggleTerminal() {
+            if (terminal.style.display === 'block') {
+                terminal.style.display = 'none';
+                terminalToggle.classList.remove('active');
+            } else {
+                terminal.style.display = 'block';
+                terminalToggle.classList.add('active');
+            }
+        }
+
+        // Auth functions
+        function handleLogin(username, password) {
+            const user = usersDatabase.find(u => 
+                (u.username === username || u.email === username) && 
+                u.password === password
+            );
+            
+            if (user) {
+                currentUser = user;
+                isAdmin = user.isAdmin || false;
+                
+                // Update UI with user info
+                updateUserUI();
+                
+                // Hide auth container, show app container
+                authContainer.classList.add('hidden');
+                appContainer.classList.remove('hidden');
+                
+                // Initialize app
+                initializeApp();
+                
+                addTerminalLog(`User ${user.username} logged in`, 'success');
+                
+                if (isAdmin) {
+                    addTerminalLog('Admin privileges activated', 'warning');
+                    adminMenuItem.classList.remove('hidden');
+                }
+                
+                return true;
+            }
+            
+            return false;
+        }
+
+        function handleSignup(username, email, password, profilePic = '') {
+            // Check if username or email already exists
+            const usernameExists = usersDatabase.some(u => u.username === username);
+            const emailExists = usersDatabase.some(u => u.email === email);
+            
+            if (usernameExists || emailExists) {
+                showModal(usernameExists ? 'Username already exists' : 'Email already exists', 'error');
+                return false;
+            }
+            
+            // Create new user
+            const newUser = {
+                id: usersDatabase.length + 1,
+                username,
+                email,
+                password,
+                profilePic: profilePic || '',
+                isPremium: false,
+                sharesUsed: 0
+            };
+            
+            usersDatabase.push(newUser);
+            currentUser = newUser;
+            
+            // Update UI with user info
+            updateUserUI();
+            
+            // Hide auth container, show app container
+            authContainer.classList.add('hidden');
+            appContainer.classList.remove('hidden');
+            
+            // Initialize app
+            initializeApp();
+            
+            addTerminalLog(`New user ${username} created`, 'success');
+            showModal('Account created successfully!', 'success');
+            
+            return true;
+        }
+
+        function updateUserUI() {
+            if (!currentUser) return;
+            
+            // Update profile pictures
+            const profilePic = currentUser.profilePic || '';
+            if (profilePic) {
+                userProfilePic.src = profilePic;
+                sideProfilePic.src = profilePic;
+                currentUserPic.src = profilePic;
+                
+                // Remove default icon if image exists
+                const profilePicIcon = profilePicSelector.querySelector('i[data-lucide="user"]');
+                if (profilePicIcon) profilePicIcon.remove();
+                
+                const profilePicUpdateIcon = profilePicUpdate.querySelector('i[data-lucide="user"]');
+                if (profilePicUpdateIcon) profilePicUpdateIcon.remove();
+            }
+            
+            // Update usernames
+            sideUsername.textContent = currentUser.username;
+            currentUserName.textContent = currentUser.username;
+            profileUsername.value = currentUser.username;
+            profileEmail.value = currentUser.email;
+            
+            // Update premium status
+            if (currentUser.isPremium) {
+                userPremiumBadge.classList.remove('hidden');
+                sidePremiumBadge.classList.remove('hidden');
+                amountsInput.removeAttribute('max');
+                shareLimitInfo.textContent = 'Premium user - unlimited shares';
+                shareLimitInfo.classList.add('text-premium-text');
+            } else {
+                userPremiumBadge.classList.add('hidden');
+                sidePremiumBadge.classList.add('hidden');
+                amountsInput.setAttribute('max', '500');
+                shareLimitInfo.textContent = 'Free users limited to 500 shares';
+                shareLimitInfo.classList.remove('text-premium-text');
+            }
+        }
+
+        function logout() {
+            currentUser = null;
+            isAdmin = false;
+            
+            // Reset forms
+            document.getElementById('login-username').value = '';
+            document.getElementById('login-password').value = '';
+            document.getElementById('signup-username').value = '';
+            document.getElementById('signup-email').value = '';
+            document.getElementById('signup-password').value = '';
+            document.getElementById('signup-confirm-password').value = '';
+            
+            // Hide app container, show auth container
+            appContainer.classList.add('hidden');
+            authContainer.classList.remove('hidden');
+            
+            // Reset to login tab
+            loginTab.click();
+            
+            addTerminalLog('User logged out', 'info');
+        }
+
+        // Post functions
+        function createPost(content, image = '') {
+            if (!content.trim()) {
+                showModal('Post content cannot be empty', 'error');
+                return;
+            }
+            
+            const newPost = {
+                id: postsDatabase.length + 1,
+                userId: currentUser.id,
+                content,
+                image,
+                likes: [],
+                comments: [],
+                timestamp: new Date()
+            };
+            
+            postsDatabase.unshift(newPost);
+            renderPosts();
+            
+            postContent.value = '';
+            imagePreview.classList.add('hidden');
+            previewImage.src = '';
+            
+            showModal('Post created successfully!', 'success');
+            addTerminalLog('New post created', 'info');
+        }
+
+        function renderPosts() {
+            postsFeed.innerHTML = '';
+            
+            if (postsDatabase.length === 0) {
+                postsFeed.innerHTML = '<div class="text-center text-text-muted py-4">No posts yet. Be the first to post!</div>';
+                return;
+            }
+            
+            postsDatabase.forEach(post => {
+                const user = usersDatabase.find(u => u.id === post.userId);
+                if (!user) return;
+                
+                const postElement = document.createElement('div');
+                postElement.className = 'post-card';
+                
+                const isLiked = post.likes.includes(currentUser.id);
+                const likeIcon = isLiked ? 'heart' : 'heart';
+                const likeColor = isLiked ? 'text-red-500' : 'text-text-muted';
+                
+                // Sort comments by timestamp (newest first)
+                const sortedComments = [...post.comments].sort((a, b) => b.timestamp - a.timestamp);
+                
+                // Format comments (show only 2 by default)
+                const commentsToShow = sortedComments.slice(0, 2);
+                const commentsHTML = commentsToShow.map(comment => {
+                    const commentUser = usersDatabase.find(u => u.id === comment.userId);
+                    return `
+                        <div class="comment-item">
+                            <img src="${commentUser?.profilePic || 'https://i.imgur.com/zi15QL3.png'}" 
+                                 alt="Profile" class="comment-avatar">
+                            <div class="comment-content">
+                                <div class="comment-author">${commentUser?.username || 'Unknown'}</div>
+                                <div class="comment-text">${comment.content}</div>
+                                <div class="text-xs text-text-muted mt-1">${formatTimeAgo(comment.timestamp)}</div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+                
+                postElement.innerHTML = `
+                    <div class="flex items-center gap-2 mb-3">
+                        <img src="${user.profilePic || 'https://i.imgur.com/zi15QL3.png'}" 
+                             alt="Profile" class="w-8 h-8 rounded-full">
+                        <div>
+                            <div class="font-medium">${user.username}</div>
+                            <div class="text-xs text-text-muted">${formatTimeAgo(post.timestamp)}</div>
+                        </div>
+                    </div>
+                    <div class="mb-3">${post.content}</div>
+                    ${post.image ? `<img src="${post.image}" alt="Post image" class="w-full rounded-lg mb-3">` : ''}
+                    <div class="flex items-center justify-between text-xs text-text-muted">
+                        <span>${post.likes.length} ${post.likes.length === 1 ? 'like' : 'likes'}</span>
+                        <span>${post.comments.length} ${post.comments.length === 1 ? 'comment' : 'comments'}</span>
+                    </div>
+                    <div class="post-actions">
+                        <div class="post-action like-btn ${likeColor}" data-post-id="${post.id}">
+                            <i data-lucide="${likeIcon}" class="w-5 h-5"></i>
+                            <span>Like</span>
+                        </div>
+                        <div class="post-action comment-btn" data-post-id="${post.id}">
+                            <i data-lucide="message-square" class="w-5 h-5 text-text-muted"></i>
+                            <span>Comment</span>
+                        </div>
+                    </div>
+                    <div class="comment-container">
+                        ${post.comments.length > 0 ? `
+                            <div class="comment-count" data-post-id="${post.id}">
+                                View all ${post.comments.length} ${post.comments.length === 1 ? 'comment' : 'comments'}
+                            </div>
+                            <div class="comment-list" id="comments-${post.id}">
+                                ${commentsHTML}
+                            </div>
+                        ` : ''}
+                        <div class="comment-input-container">
+                            <img src="${currentUser.profilePic || 'https://i.imgur.com/zi15QL3.png'}" 
+                                 alt="Profile" class="w-8 h-8 rounded-full">
+                            <input type="text" class="comment-input" placeholder="Write a comment..." 
+                                   id="comment-input-${post.id}" data-post-id="${post.id}">
+                            <button class="comment-submit" data-post-id="${post.id}">
+                                <i data-lucide="send" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+                
+                postsFeed.appendChild(postElement);
+            });
+            
+            lucide.createIcons();
+            
+            // Add event listeners to like buttons
+            document.querySelectorAll('.like-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const postId = parseInt(this.getAttribute('data-post-id'));
+                    toggleLike(postId);
+                });
+            });
+            
+            // Add event listeners to comment buttons
+            document.querySelectorAll('.comment-submit').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const postId = parseInt(this.getAttribute('data-post-id'));
+                    const commentInput = document.getElementById(`comment-input-${postId}`);
+                    addComment(postId, commentInput.value);
+                    commentInput.value = '';
+                });
+            });
+            
+            // Add event listeners to comment input fields (press Enter to submit)
+            document.querySelectorAll('.comment-input').forEach(input => {
+                input.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        const postId = parseInt(this.getAttribute('data-post-id'));
+                        addComment(postId, this.value);
+                        this.value = '';
+                    }
+                });
+            });
+            
+            // Add event listeners to view all comments
+            document.querySelectorAll('.comment-count').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const postId = parseInt(this.getAttribute('data-post-id'));
+                    const post = postsDatabase.find(p => p.id === postId);
+                    if (!post) return;
+                    
+                    // Sort comments by timestamp (newest first)
+                    const sortedComments = [...post.comments].sort((a, b) => b.timestamp - a.timestamp);
+                    
+                    // Show all comments
+                    const commentsContainer = document.getElementById(`comments-${postId}`);
+                    commentsContainer.innerHTML = sortedComments.map(comment => {
+                        const commentUser = usersDatabase.find(u => u.id === comment.userId);
+                        return `
+                            <div class="comment-item">
+                                <img src="${commentUser?.profilePic || 'https://i.imgur.com/zi15QL3.png'}" 
+                                     alt="Profile" class="comment-avatar">
+                                <div class="comment-content">
+                                    <div class="comment-author">${commentUser?.username || 'Unknown'}</div>
+                                    <div class="comment-text">${comment.content}</div>
+                                    <div class="text-xs text-text-muted mt-1">${formatTimeAgo(comment.timestamp)}</div>
+                                </div>
+                            </div>
+                        `;
+                    }).join('');
+                });
+            });
+        }
+
+        function addComment(postId, content) {
+            if (!content.trim()) return;
+            
+            const post = postsDatabase.find(p => p.id === postId);
+            if (!post) return;
+            
+            const newComment = {
+                userId: currentUser.id,
+                content: content.trim(),
+                timestamp: new Date()
+            };
+            
+            post.comments.unshift(newComment);
+            renderPosts();
+            
+            addTerminalLog(`Added comment to post ${postId}`, 'info');
+        }
+
+        function toggleLike(postId) {
+            const post = postsDatabase.find(p => p.id === postId);
+            if (!post) return;
+            
+            const likeIndex = post.likes.indexOf(currentUser.id);
+            if (likeIndex === -1) {
+                post.likes.push(currentUser.id);
+            } else {
+                post.likes.splice(likeIndex, 1);
+            }
+            
+            renderPosts();
+        }
+
+        function formatTimeAgo(date) {
+            const seconds = Math.floor((new Date() - date) / 1000);
+            
+            let interval = Math.floor(seconds / 31536000);
+            if (interval >= 1) return `${interval} year${interval === 1 ? '' : 's'} ago`;
+            
+            interval = Math.floor(seconds / 2592000);
+            if (interval >= 1) return `${interval} month${interval === 1 ? '' : 's'} ago`;
+            
+            interval = Math.floor(seconds / 86400);
+            if (interval >= 1) return `${interval} day${interval === 1 ? '' : 's'} ago`;
+            
+            interval = Math.floor(seconds / 3600);
+            if (interval >= 1) return `${interval} hour${interval === 1 ? '' : 's'} ago`;
+            
+            interval = Math.floor(seconds / 60);
+            if (interval >= 1) return `${interval} minute${interval === 1 ? '' : 's'} ago`;
+            
+            return `${Math.floor(seconds)} second${seconds === 1 ? '' : 's'} ago`;
+        }
+
+        // Chat functions
+        function renderChatMessages() {
+            chatMessages.innerHTML = '';
+            
+            if (chatMessagesDatabase.length === 0) {
+                chatMessages.innerHTML = '<div class="text-center text-text-muted py-4">Start chatting with others!</div>';
+                return;
+            }
+            
+            chatMessagesDatabase.forEach(msg => {
+                const user = usersDatabase.find(u => u.id === msg.userId);
+                if (!user) return;
+                
+                const isCurrentUser = msg.userId === currentUser.id;
+                const messageElement = document.createElement('div');
+                messageElement.className = `chat-message ${isCurrentUser ? 'sent' : 'received'}`;
+                
+                messageElement.innerHTML = `
+                    <div class="text-xs font-medium">${user.username}</div>
+                    <div>${msg.content}</div>
+                    <div class="text-xs text-text-muted mt-1">${formatTimeAgo(msg.timestamp)}</div>
+                `;
+                
+                chatMessages.appendChild(messageElement);
+            });
+            
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function sendMessage(content) {
+            if (!content.trim()) return;
+            
+            const newMessage = {
+                userId: currentUser.id,
+                content,
+                timestamp: new Date()
+            };
+            
+            chatMessagesDatabase.push(newMessage);
+            renderChatMessages();
+            
+            chatInput.value = '';
+            
+            // In a real app, this would send to a WebSocket server
+            addTerminalLog(`Message sent: ${content}`, 'info');
+        }
+
+        // Admin functions
+        function renderUsersList() {
+            usersList.innerHTML = '';
+            
+            const premiumUsers = usersDatabase.filter(u => u.isPremium && !u.isAdmin);
+            const freeUsers = usersDatabase.filter(u => !u.isPremium && !u.isAdmin);
+            
+            // Update stats
+            totalUsersCount.textContent = usersDatabase.length - 1; // exclude admin
+            premiumUsersCount.textContent = premiumUsers.length;
+            freeUsersCount.textContent = freeUsers.length;
+            totalSharesCount.textContent = usersDatabase.reduce((sum, user) => sum + user.sharesUsed, 0);
+            
+            // Render premium users first
+            premiumUsers.forEach(user => {
+                const userElement = document.createElement('div');
+                userElement.className = 'admin-user-card';
+                
+                userElement.innerHTML = `
+                    <img src="${user.profilePic || 'https://i.imgur.com/zi15QL3.png'}" 
+                         alt="Profile" class="admin-user-avatar">
+                    <div class="admin-user-info">
+                        <div class="admin-user-name">${user.username}</div>
+                        <div class="admin-user-email">${user.email}</div>
+                    </div>
+                    <div class="admin-user-status admin-user-premium">
+                        <i data-lucide="crown" class="w-3 h-3 inline"></i> Premium
+                    </div>
+                    <button class="admin-toggle-btn admin-toggle-remove" data-user-id="${user.id}">
+                        Remove
+                    </button>
+                `;
+                
+                usersList.appendChild(userElement);
+            });
+            
+            // Render free users
+            freeUsers.forEach(user => {
+                const userElement = document.createElement('div');
+                userElement.className = 'admin-user-card';
+                
+                userElement.innerHTML = `
+                    <img src="${user.profilePic || 'https://i.imgur.com/zi15QL3.png'}" 
+                         alt="Profile" class="admin-user-avatar">
+                    <div class="admin-user-info">
+                        <div class="admin-user-name">${user.username}</div>
+                        <div class="admin-user-email">${user.email}</div>
+                    </div>
+                    <div class="admin-user-status admin-user-free">
+                        Free
+                    </div>
+                    <button class="admin-toggle-btn admin-toggle-premium" data-user-id="${user.id}">
+                        Make Premium
+                    </button>
+                `;
+                
+                usersList.appendChild(userElement);
+            });
+            
+            // Add event listeners to premium toggle buttons
+            document.querySelectorAll('.admin-toggle-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const userId = parseInt(this.getAttribute('data-user-id'));
+                    togglePremium(userId);
+                });
+            });
+            
+            lucide.createIcons();
+        }
+
+        function togglePremium(userId) {
+            const user = usersDatabase.find(u => u.id === userId);
+            if (!user) return;
+            
+            user.isPremium = !user.isPremium;
+            renderUsersList();
+            
+            showModal(`${user.username} is now ${user.isPremium ? 'Premium' : 'Free'}`, 'success');
+            addTerminalLog(`Premium status changed for ${user.username}`, 'info');
+            
+            // If the current user was updated, refresh their UI
+            if (currentUser && currentUser.id === userId) {
+                updateUserUI();
+            }
+        }
+
+        // Server functions
+        function renderServerList() {
+            serverListContainer.innerHTML = '';
+            Object.keys(serverDefinitions).forEach(key => {
+                const server = serverDefinitions[key];
+                const item = document.createElement('div');
+                item.classList.add('server-item', 'p-3', 'rounded-lg', 'border', 'flex', 'justify-between', 'items-center', 'disabled', 'bg-input-bg');
+                item.dataset.serverKey = key;
+                item.innerHTML = `
+                     <span class="server-name font-medium text-sm">${server.name}</span>
+                     <span class="server-status text-xs flex items-center gap-1.5">
+                         <span class="status-dot bg-gray-500"></span>
+                         <span class="status-text text-text-muted">Checking...</span>
+                     </span>
+                 `;
+                item.addEventListener('click', () => handleServerSelection(key));
+                serverListContainer.appendChild(item);
+            });
+            lucide.createIcons();
+        }
+
+        function handleServerSelection(key) {
+            const serverItem = serverListContainer.querySelector(`.server-item[data-server-key="${key}"]`);
+            if (serverItem && !serverItem.classList.contains('disabled')) {
+                const currentlySelected = serverListContainer.querySelector('.border-primary');
+                if (currentlySelected) {
+                   currentlySelected.classList.remove('border-primary', 'bg-primary/10');
+                   currentlySelected.classList.add('border-input-border', 'bg-input-bg');
+                }
+
+                serverItem.classList.remove('border-input-border', 'bg-input-bg');
+                serverItem.classList.add('border-primary', 'bg-primary/10');
+
+                currentSelectedServer = key;
+                selectedServerInput.value = key;
+                serverSelectButtonText.textContent = `${serverDefinitions[key].name} (Active)`;
+                serverModal.style.display = 'none';
+                validateForm();
+                addTerminalLog(`Selected server: ${serverDefinitions[key].name}`, 'success');
+            }
+        }
+
+        function updateButtonState(text, iconName, enabled, isError = false) {
+            buttonText.textContent = text;
+            buttonIcon.innerHTML = `<i data-lucide="${iconName}" class="w-5 h-5 ${iconName === 'loader-circle' ? 'animate-spin' : ''}"></i>`;
+            lucide.createIcons();
+
+            const shouldBeEnabled = enabled && selectedServerInput.value !== '';
+            submitButton.disabled = !shouldBeEnabled;
+
+            const primaryColor = tailwind.config.theme.extend.colors.primary;
+            const primaryDarkerColor = tailwind.config.theme.extend.colors['primary-darker'];
+            const errorColor = tailwind.config.theme.extend.colors['error-bg'];
+            const errorDarkerColor = '#7f1d1d';
+
+            submitButton.style.backgroundColor = '';
+            submitButton.classList.remove('bg-primary', 'hover:bg-primary-darker', 'bg-red-700', 'hover:bg-red-800');
+
+            if (isError) {
+                 submitButton.style.backgroundColor = errorColor;
+            } else if (shouldBeEnabled) {
+                submitButton.classList.add('bg-primary', 'hover:bg-primary-darker');
+            } else {
+                 submitButton.classList.add('bg-primary');
+            }
+        }
+
+        async function checkServerStatus() {
+            let oneServerActive = false;
+            addTerminalLog('Checking server statuses...', 'info');
+
+            const statusPromises = Object.keys(serverDefinitions).map(async (key) => {
+                const server = serverDefinitions[key];
+                const serverItem = serverListContainer.querySelector(`.server-item[data-server-key="${key}"]`);
+                const statusDot = serverItem?.querySelector('.status-dot');
+                const statusTextElement = serverItem?.querySelector('.status-text');
+
+                if (!serverItem || !statusDot || !statusTextElement) return false;
+
+                let statusText = 'Checking...';
+                let statusColorClass = 'bg-gray-500';
+                let isActive = false;
+
+                try {
+                    const controller = new AbortController();
+                    const timeoutId = setTimeout(() => controller.abort(), 6000);
+                    await fetch(server.url, { signal: controller.signal, mode: 'no-cors' });
+                    clearTimeout(timeoutId);
+                    statusText = 'Active';
+                    statusColorClass = 'bg-status-active';
+                    isActive = true;
+                    oneServerActive = true;
+                    addTerminalLog(`${server.name}: Online`, 'success');
+                } catch (error) {
+                    if (error.name === 'AbortError') {
+                        statusText = 'Timeout';
+                        statusColorClass = 'bg-status-timeout';
+                        addTerminalLog(`${server.name}: Timeout`, 'warning');
+                    } else {
+                        statusText = 'Offline';
+                        statusColorClass = 'bg-status-offline';
+                        addTerminalLog(`${server.name}: Offline`, 'error');
+                    }
+                }
+
+                statusDot.className = `status-dot ${statusColorClass}`;
+                statusTextElement.textContent = statusText;
+                statusTextElement.classList.toggle('text-text-muted', !isActive);
+                statusTextElement.classList.toggle('text-status-active', isActive);
+
+                serverItem.classList.toggle('disabled', !isActive);
+                 if(currentSelectedServer === key) {
+                     serverItem.classList.toggle('border-primary', isActive);
+                     serverItem.classList.toggle('border-input-border', !isActive);
+                 } else {
+                     serverItem.classList.remove('border-primary');
+                     serverItem.classList.add('border-input-border');
+                 }
+
+                if (!isActive && currentSelectedServer === key) {
+                    currentSelectedServer = null;
+                    selectedServerInput.value = '';
+                    serverSelectButtonText.textContent = 'Select a Server...';
+                    serverItem.classList.remove('border-primary', 'bg-primary/10');
+                    serverItem.classList.add('border-input-border', 'bg-input-bg');
+                    validateForm();
+                    addTerminalLog(`Server ${server.name} went offline`, 'error');
+                } else if (isActive && currentSelectedServer === key) {
+                    serverSelectButtonText.textContent = `${server.name} (Active)`;
+                    serverItem.classList.remove('border-input-border', 'bg-input-bg');
+                    serverItem.classList.add('border-primary', 'bg-primary/10');
+                }
+                return isActive;
+            });
+
+            await Promise.all(statusPromises);
+
+            if (buttonText.textContent !== 'Submitting...') {
+                if (!oneServerActive) {
+                    updateButtonState('All Servers Offline', 'alert-triangle', false, true);
+                    if (currentSelectedServer) {
+                         currentSelectedServer = null;
+                         selectedServerInput.value = '';
+                         serverSelectButtonText.textContent = 'Select a Server...';
+                    }
+                } else {
+                     validateForm();
+                }
+            }
+
+            clearInterval(intervalCheck);
+            intervalCheck = setInterval(checkServerStatus, 60000);
+            addTerminalLog('Server status check completed', 'info');
+        }
+
+        function showModal(message, type = 'info') {
+             responseMessageElement.textContent = message;
+             responseModal.style.display = 'flex';
+             const modalContent = responseModal.querySelector('.modal-content');
+             modalContent.className = 'modal-content flex flex-col items-center gap-3';
+
+             let iconName = 'info';
+             let iconColorClass = 'text-primary';
+
+             if (type === 'success') {
+                 modalContent.classList.add('success');
+                 iconName = 'check-circle-2';
+                 iconColorClass = 'text-status-active';
+                 addTerminalLog(message, 'success');
+             } else if (type === 'error') {
+                 modalContent.classList.add('error');
+                 iconName = 'alert-circle';
+                 iconColorClass = 'text-status-offline';
+                 addTerminalLog(message, 'error');
+             } else if (type === 'loading') {
+                 iconName = 'loader-circle';
+                 iconColorClass = 'text-primary';
+                 responseModalIconElement.innerHTML = `<i data-lucide="${iconName}" class="w-8 h-8 ${iconColorClass} animate-spin"></i>`;
+                 lucide.createIcons();
+                 return;
+             }
+
+             responseModalIconElement.innerHTML = `<i data-lucide="${iconName}" class="w-8 h-8 ${iconColorClass}"></i>`;
+             lucide.createIcons();
+
+             setTimeout(() => {
+                 if (responseModal.style.display === 'flex') {
+                     responseModal.style.display = 'none';
+                 }
+             }, 4000);
+         }
+
+        function validateForm() {
+            const serverSelected = selectedServerInput.value !== '';
+             const anyServerActive = Array.from(serverListContainer?.querySelectorAll('.server-item:not(.disabled)') || []).length > 0;
+
+             const allInputsFilled = Array.from(form.elements).every(el => {
+                 if (el.required) {
+                     return el.value && el.value.trim() !== '';
+                 }
+                 return true;
+             });
+
+             if (!anyServerActive) {
+                 updateButtonState('All Servers Offline', 'alert-triangle', false, true);
+             } else if (!serverSelected) {
+                 updateButtonState('Select Server First', 'alert-circle', false, false);
+             } else if (!allInputsFilled) {
+                 updateButtonState('Fill All Fields', 'edit-3', false, false);
+             } else {
+                 updateButtonState('Start Boosting', 'rocket', true, false);
+             }
+         }
+
+        function setActiveSection(sectionName) {
+            const targetSectionId = `${sectionName}-section`;
+            const targetSection = document.getElementById(targetSectionId);
+
+            contentSections.forEach(section => section.classList.remove('active'));
+            if (targetSection) {
+                targetSection.classList.add('active');
+            }
+
+            navItems.forEach((navItem, index) => {
+                if (navItem.dataset.section === sectionName) {
+                    navItem.classList.remove('text-text-muted');
+                    navItem.classList.add('text-primary');
+                    if (navIndicator) {
+                         navIndicator.style.transform = `translateX(${index * 100}%)`;
+                    }
+                } else {
+                    navItem.classList.remove('text-primary');
+                    navItem.classList.add('text-text-muted');
+                }
+            });
+
+            sideMenuItems.forEach((sideItem) => {
+                 const iconElement = sideItem.querySelector('i[data-lucide]') || sideItem.querySelector('svg');
+
+                 if (sideItem.dataset.section === sectionName) {
+                     sideItem.classList.add('text-text-main', 'bg-primary/10', 'font-medium');
+                     sideItem.classList.remove('text-text-muted');
+                     if (iconElement) {
+                        iconElement.classList.add('text-primary');
+                     }
+                 } else {
+                     sideItem.classList.remove('text-text-main', 'bg-primary/10', 'font-medium');
+                     sideItem.classList.add('text-text-muted');
+                     if (iconElement) {
+                        iconElement.classList.remove('text-primary');
+                     }
+                 }
+             });
+
+             closeSideMenu();
+        }
+
+        function openSideMenu() {
+            menuOverlay.classList.remove('hidden');
+            requestAnimationFrame(() => {
+                sideMenu.classList.add('open');
+                menuOverlay.classList.remove('opacity-0');
+            });
+        }
+
+        function closeSideMenu() {
+            sideMenu.classList.remove('open');
+            menuOverlay.classList.add('opacity-0');
+            setTimeout(() => {
+                 menuOverlay.classList.add('hidden');
+             }, 300);
+        }
+
+        function initializeApp() {
+            // Initialize server status checks
+            renderServerList();
+            checkServerStatus();
+            validateForm();
+
+            // Initialize posts
+            renderPosts();
+
+            // Initialize chat
+            renderChatMessages();
+
+            // Initialize admin panel if admin
+            if (isAdmin) {
+                renderUsersList();
+            }
+
+            // Set active section to home
+            setActiveSection('home');
+
+            // Add event listeners to form inputs
+            ['cookies', 'urls', 'amounts', 'intervals'].forEach(id => {
+                const input = document.getElementById(id);
+                if (input) {
+                     input.addEventListener('input', validateForm);
+                     input.addEventListener('change', validateForm);
+                 }
+            });
+
+            // Initialize terminal
+            addTerminalLog('Share Boost initialized', 'success');
+            addTerminalLog('Ready to boost your posts!', 'info');
+        }
+
+        // Event Listeners
+        serverSelectButton.addEventListener('click', () => {
+            serverModal.style.display = 'flex';
+            renderServerList();
+            checkServerStatus();
+            lucide.createIcons();
+        });
+
+        form.onsubmit = async function(event) {
+            event.preventDefault();
+
+             validateForm();
+             if (submitButton.disabled) {
+                 if (!selectedServerInput.value) {
+                     showModal('Please select an active server first.', 'error');
+                 } else {
+                     showModal('Please fill in all required fields.', 'error');
+                 }
+                 return;
+            }
+
+            // Check share limit for free users
+            if (!currentUser.isPremium) {
+                const requestedShares = parseInt(amountsInput.value);
+                const remainingShares = 500 - currentUser.sharesUsed;
+                
+                if (requestedShares > remainingShares) {
+                    showModal(`You have only ${remainingShares} shares remaining in your free limit.`, 'error');
+                    return;
+                }
+            }
+
+            const serverValue = selectedServerInput.value;
+            const url = document.getElementById('urls').value;
+            const amount = document.getElementById('amounts').value;
+            const cookie = document.getElementById('cookies').value;
+            const interval = document.getElementById('intervals').value;
+             if (!url || !amount || !cookie || !interval || !serverValue) {
+                 showModal('Please fill in all required fields and select a server.', 'error');
+                 validateForm();
+                 return;
+            }
+
+            updateButtonState('Submitting...', 'loader-circle', false);
+            showModal('Submitting request...', 'loading');
+            addTerminalLog(`Submitting share request for ${amount} shares...`, 'info');
+
+            try {
+                const serverUrl = serverDefinitions[serverValue]?.url;
+                if (!serverUrl) throw new Error("Selected server definition not found.");
+
+                const response = await fetch(`${serverUrl}/api/submit`, {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        cookie: cookie,
+                        url: url,
+                        amount: parseInt(amount),
+                        interval: parseInt(interval)
+                    }),
+                    headers: { 'Content-Type': 'application/json' },
+                    signal: AbortSignal.timeout(20000)
+                });
+
+                let data;
+                try {
+                     const contentType = response.headers.get("content-type");
+                     if (contentType && contentType.indexOf("application/json") !== -1) {
+                         data = await response.json();
+                     } else {
+                         const textResponse = await response.text();
+                         throw new Error(textResponse || `Server returned status ${response.status}`);
+                     }
+                } catch (parseError) {
+                     throw new Error(`Failed to process server response. Status: ${response.status}. ${parseError.message}`);
+                }
+
+                if (!response.ok) {
+                    throw new Error(data?.message || response.statusText || `Server error: ${response.status}`);
+                }
+
+                const successMessage = data.message || 'Submitted successfully! Processing started.';
+                showModal(successMessage, 'success');
+                sharesSentCount += parseInt(amount);
+                
+                // Update user's share count
+                if (currentUser) {
+                    currentUser.sharesUsed += parseInt(amount);
+                }
+                
+                addTerminalLog(successMessage, 'success');
+                addTerminalLog(`Total shares sent: ${sharesSentCount}`, 'info');
+                
+                form.reset();
+                selectedServerInput.value = '';
+                serverSelectButtonText.textContent = 'Select a Server...';
+                currentSelectedServer = null;
+                 const selectedItem = serverListContainer.querySelector('.border-primary');
+                 if (selectedItem) {
+                     selectedItem.classList.remove('border-primary', 'bg-primary/10');
+                     selectedItem.classList.add('border-input-border', 'bg-input-bg');
+                 }
+
+            } catch (error) {
+                console.error("Submission Error:", error);
+                const errorMessage = error.name === 'TimeoutError'
+                    ? 'Request timed out. Server might be busy or unresponsive.'
+                    : `Error: ${error.message}`;
+                showModal(errorMessage, 'error');
+                addTerminalLog(errorMessage, 'error');
+            } finally {
+                 if (responseModalIconElement.querySelector('[data-lucide="loader-circle"]')) {
+                     responseModal.style.display = 'none';
+                 }
+                 validateForm();
+            }
+        };
+
+        // Auth tab switching
+        loginTab.addEventListener('click', (e) => {
+            e.preventDefault();
+            loginTab.classList.add('active');
+            signupTab.classList.remove('active');
+            loginForm.classList.remove('hidden');
+            signupForm.classList.add('hidden');
+        });
+
+        signupTab.addEventListener('click', (e) => {
+            e.preventDefault();
+            signupTab.classList.add('active');
+            loginTab.classList.remove('active');
+            signupForm.classList.remove('hidden');
+            loginForm.classList.add('hidden');
+        });
+
+        adminLoginToggle.addEventListener('click', (e) => {
+            e.preventDefault();
+            adminLoginForm.classList.remove('hidden');
+            loginForm.classList.add('hidden');
+        });
+
+        backToUserLogin.addEventListener('click', (e) => {
+            e.preventDefault();
+            adminLoginForm.classList.add('hidden');
+            loginForm.classList.remove('hidden');
+        });
+
+        backToLogin.addEventListener('click', (e) => {
+            e.preventDefault();
+            loginTab.click();
+        });
+
+        // Login button
+        loginButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            const username = document.getElementById('login-username').value;
+            const password = document.getElementById('login-password').value;
+            
+            if (!username || !password) {
+                showModal('Please enter both username and password', 'error');
+                return;
+            }
+            
+            if (handleLogin(username, password)) {
+                showModal('Login successful!', 'success');
+            } else {
+                showModal('Invalid username or password', 'error');
+            }
+        });
+
+        // Admin login button
+        adminLoginButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            const username = document.getElementById('admin-username').value;
+            const password = document.getElementById('admin-password').value;
+            
+            if (!username || !password) {
+                showModal('Please enter both username and password', 'error');
+                return;
+            }
+            
+            if (handleLogin(username, password)) {
+                showModal('Admin login successful!', 'success');
+            } else {
+                showModal('Invalid admin credentials', 'error');
+            }
+        });
+
+        // Signup button
+        signupButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            const username = document.getElementById('signup-username').value;
+            const email = document.getElementById('signup-email').value;
+            const password = document.getElementById('signup-password').value;
+            const confirmPassword = document.getElementById('signup-confirm-password').value;
+            
+            if (!username || !email || !password || !confirmPassword) {
+                showModal('Please fill in all fields', 'error');
+                return;
+            }
+            
+            if (password !== confirmPassword) {
+                showModal('Passwords do not match', 'error');
+                return;
+            }
+            
+            handleSignup(username, email, password);
+        });
+
+        // Profile picture selection
+        profilePicSelector.addEventListener('click', () => {
+            profilePicInput.click();
+        });
+
+        profilePicInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    profilePicSelector.innerHTML = `<img src="${event.target.result}" alt="Profile" class="w-full h-full object-cover">`;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        profilePicUpdate.addEventListener('click', () => {
+            profilePicUpdateInput.click();
+        });
+
+        profilePicUpdateInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    profilePicUpdate.innerHTML = `<img src="${event.target.result}" alt="Profile" class="w-full h-full object-cover">`;
+                    userProfilePic.src = event.target.result;
+                    sideProfilePic.src = event.target.result;
+                    currentUserPic.src = event.target.result;
+                    
+                    // Update user in database
+                    if (currentUser) {
+                        currentUser.profilePic = event.target.result;
+                    }
+                    
+                    showModal('Profile picture updated!', 'success');
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Post creation
+        addImageBtn.addEventListener('click', () => {
+            postImage.click();
+        });
+
+        postImage.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    previewImage.src = event.target.result;
+                    imagePreview.classList.remove('hidden');
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        removeImageBtn.addEventListener('click', () => {
+            postImage.value = '';
+            previewImage.src = '';
+            imagePreview.classList.add('hidden');
+        });
+
+        postSubmitBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            createPost(postContent.value, previewImage.src || '');
+        });
+
+        // Chat functionality
+        sendChatBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            sendMessage(chatInput.value);
+        });
+
+        chatInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                sendMessage(chatInput.value);
+            }
+        });
+
+        // Profile save
+        profileSaveBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            const newUsername = profileUsername.value;
+            const newEmail = profileEmail.value;
+            const newPassword = profilePassword.value;
+            const newConfirmPassword = profileConfirmPassword.value;
+            
+            if (!newUsername || !newEmail) {
+                showModal('Username and email are required', 'error');
+                return;
+            }
+            
+            if (newPassword && newPassword !== newConfirmPassword) {
+                showModal('Passwords do not match', 'error');
+                return;
+            }
+            
+            // Update user in database
+            if (currentUser) {
+                currentUser.username = newUsername;
+                currentUser.email = newEmail;
+                if (newPassword) {
+                    currentUser.password = newPassword;
+                }
+                
+                // Update UI
+                sideUsername.textContent = newUsername;
+                currentUserName.textContent = newUsername;
+                
+                showModal('Profile updated successfully!', 'success');
+            }
+        });
+
+        // Logout
+        logoutButton.addEventListener('click', logout);
+
+        // Navigation
+        navItems.forEach((item) => {
+            item.addEventListener('click', function(e) {
+                e.preventDefault();
+                setActiveSection(this.dataset.section);
+            });
+        });
+
+        sideMenuItems.forEach((item) => {
+             item.addEventListener('click', function(e) {
+                 e.preventDefault();
+                 setActiveSection(this.dataset.section);
+             });
+         });
+
+        if(menuButton) menuButton.addEventListener('click', openSideMenu);
+        if(closeMenuButton) closeMenuButton.addEventListener('click', closeSideMenu);
+        if(menuOverlay) menuOverlay.addEventListener('click', closeSideMenu);
+
+        if(developerButton) developerButton.addEventListener('click', () => {
+            developerModal.style.display = 'flex';
+            lucide.createIcons();
+            addTerminalLog('Opened developer information', 'info');
+        });
+
+        if(sideDeveloperButton) sideDeveloperButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            developerModal.style.display = 'flex';
+            lucide.createIcons();
+            closeSideMenu();
+            addTerminalLog('Opened developer information', 'info');
+        });
+
+        if(sideTerminalButton) sideTerminalButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            toggleTerminal();
+            closeSideMenu();
+        });
+
+        if(terminalToggle) terminalToggle.addEventListener('click', toggleTerminal);
+        if(terminalClose) terminalClose.addEventListener('click', toggleTerminal);
+
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+            
+            // Set default profile pictures
+            const defaultProfilePic = 'https://i.imgur.com/zi15QL3.png';
+            userProfilePic.src = defaultProfilePic;
+            sideProfilePic.src = defaultProfilePic;
+            currentUserPic.src = defaultProfilePic;
+            
+            // Set initial active tab to login
+            loginTab.click();
+            
+            addTerminalLog('Welcome to Share Boost!', 'info');
+        });
+    </script>
+</body>
+</html>
